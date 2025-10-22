@@ -1,0 +1,129 @@
+openapi: 3.0.1
+info:
+  title: ''
+  description: ''
+  version: 1.0.0
+paths:
+  /v3/users/lookup:
+    get:
+      summary: 查找成员
+      deprecated: false
+      description: 根据输入的人员名称匹配用户，返回用户 ID、姓名、已脱敏的手机号和邮箱。
+      tags:
+      - V3-beta（AI 友好）/公共查询
+      - 公共查询
+      parameters:
+      - name: name
+        in: query
+        description: 人员名称（精准匹配）
+        required: true
+        schema:
+          type: string
+      - name: HAP-Appkey
+        in: header
+        description: appkey
+        required: false
+        schema:
+          type: string
+      - name: HAP-Sign
+        in: header
+        description: 签名
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/obj_user_desensitized'
+                    required:
+                    - users
+                  success:
+                    type: boolean
+                    description: 是否调用成功
+                  error_code:
+                    type: integer
+                    description: 错误代码
+                  error_msg:
+                    type: string
+                    description: 错误消息
+                required:
+                - data
+                - success
+          headers: {}
+      security: []
+components:
+  schemas:
+    obj_user_desensitized:
+      type: object
+      properties:
+        accountId:
+          type: string
+          description: 用户 id
+        fullname:
+          type: string
+          description: ' 名称'
+        mobile:
+          type: string
+          description: 手机号，脱敏规则：保留前3位 + 最后4位，中间用 * 替代
+        email:
+          type: string
+          description: "     邮箱，脱敏规则：\n      前缀长度 > 4：去掉前缀最后 4 位，余下部分 + **** + @域名。例：abcdefg@example.com\
+            \ → abc****@example.com\n      前缀长度 2～4：保留首字母 + *** + @域名。例：ab@example.com\
+            \ → a***@example.com"
+        departments:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: 部门id
+              name:
+                type: string
+                description: '部门名称
+
+                  '
+              path:
+                type: string
+                description: '部门路径
+
+                  "最高级部门名称/.../父部门名称"'
+              pathNodes:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: 部门id
+                    name:
+                      type: string
+                      description: 部门名称
+                  required:
+                  - id
+                  - name
+                description: 部门路径列表
+            required:
+            - id
+            - name
+            - path
+  securitySchemes:
+    bearer:
+      type: bearer
+      scheme: bearer
+servers:
+- url: https://api.mingdao.com
+  description: 正式环境
+security:
+- bearer: []

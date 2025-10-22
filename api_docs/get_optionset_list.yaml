@@ -1,0 +1,119 @@
+openapi: 3.0.1
+info:
+  title: ''
+  description: ''
+  version: 1.0.0
+paths:
+  /v3/app/optionsets:
+    get:
+      summary: 获取选项集列表
+      deprecated: false
+      description: 获取应用下选项集列表
+      tags:
+      - V3-beta（AI 友好）/选项集
+      - 选项集
+      parameters:
+      - name: HAP-Appkey
+        in: header
+        description: appkey
+        required: false
+        schema:
+          type: string
+      - name: HAP-Sign
+        in: header
+        description: 签名
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      optionsets:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/obj_optionset'
+                    required:
+                    - optionsets
+                  success:
+                    type: boolean
+                    description: 是否调用成功
+                  error_code:
+                    type: integer
+                    description: 错误代码
+                  error_msg:
+                    type: string
+                    description: 错误消息
+                required:
+                - data
+                - success
+          headers: {}
+      security: []
+components:
+  schemas:
+    obj_optionset:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 选项集ID
+        name:
+          type: string
+          description: 选项集名称
+        accountId:
+          type: string
+        worksheetIds:
+          type: array
+          items:
+            type: string
+          description: 引用选项集的工作表列表
+        options:
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+                title: 选项id
+              value:
+                type: string
+                title: 选项值，不允许重复
+              index:
+                type: integer
+                title: '选项排序值: 必须为整数，越小越靠前'
+              isDeleted:
+                type: boolean
+                title: 该选项是否已被删除
+              color:
+                type: string
+                title: 颜色值
+              score:
+                type: integer
+                title: 选项分值
+            required:
+            - key
+            - value
+            - index
+            - isDeleted
+            - color
+            - score
+        enableColor:
+          type: boolean
+        enableScore:
+          type: boolean
+  securitySchemes:
+    bearer:
+      type: bearer
+      scheme: bearer
+servers:
+- url: https://api.mingdao.com
+  description: 正式环境
+security:
+- bearer: []

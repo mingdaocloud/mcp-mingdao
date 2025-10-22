@@ -1,0 +1,219 @@
+openapi: 3.0.1
+info:
+  title: ''
+  description: ''
+  version: 1.0.0
+paths:
+  /v3/app/worksheets/{worksheet_id}:
+    get:
+      summary: 获取工作表结构信息
+      deprecated: false
+      description: 获取工作表配置及其控件信息
+      tags:
+      - V3-beta（AI 友好）/工作表
+      - 工作表
+      parameters:
+      - name: worksheet_id
+        in: path
+        description: 工作表 ID
+        required: true
+        schema:
+          type: string
+      - name: responseFormat
+        in: query
+        description: json：返回 JSON，md：返回 md 文本(更省 token)。默认为 json
+        required: false
+        schema:
+          type: string
+      - name: HAP-Appkey
+        in: header
+        description: appkey
+        required: false
+        schema:
+          type: string
+      - name: HAP-Sign
+        in: header
+        description: 签名
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      worksheetId:
+                        type: string
+                        description: 工作表ID
+                      name:
+                        type: string
+                        description: 工作表名称
+                      alias:
+                        type: string
+                        description: 工作表别名
+                      fields:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              description: 字段ID
+                            name:
+                              type: string
+                              description: 字段名称
+                            alias:
+                              type: string
+                              description: 字段别名
+                            desc:
+                              type: string
+                              description: 字段描述
+                            type:
+                              type: string
+                              description: 字段类型
+                            required:
+                              type: boolean
+                              description: 默认值
+                            isHidden:
+                              type: boolean
+                              description: 是否隐藏
+                            isReadOnly:
+                              type: boolean
+                              description: 是否只读
+                            isHiddenOnCreate:
+                              type: boolean
+                              description: 是否新增记录时隐藏
+                              nullable: true
+                            isUnique:
+                              type: boolean
+                              description: 是否唯一
+                            isTitle:
+                              type: boolean
+                              description: ' 1：标题,0：非标题'
+                            precision:
+                              type: integer
+                              description: type=Number|Currency时，表示保留小数位（0-14）
+                            subType:
+                              type: integer
+                              description: " 子类型配置：\n      - type=Collaborator时，表示成员数量，0：单选，1：多选\n\
+                                \      - type=Relation时，表示关联记录数量，1：单条，2：多条\n     \
+                                \ - type=Time时，表示时间格式，1：时.分，6：时.分.秒\n      - type=Date|DateTime时，表示日期格式，5：年，4：年月，3：年月日，2：年月日时，1：年月日时分，6：年月日"
+                            remark:
+                              type: string
+                              description: 开发者备注
+                            options:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  key:
+                                    type: string
+                                  value:
+                                    type: string
+                                  index:
+                                    type: string
+                                  isDeleted:
+                                    type: string
+                                    description: 是否删除
+                                required:
+                                - value
+                                - index
+                                - key
+                                - isDeleted
+                              description: type=SingleSelect｜MultipleSelect时，表示选项信息
+                            max:
+                              type: integer
+                              description: type=Rating时，表示等级最大值（0-10）
+                            dataSource:
+                              type: string
+                              description: type=Relation时，表示关联表ID
+                            relation:
+                              description: 'type=Relation时，关联字段字段 配置项
+
+
+                                '
+                              type: object
+                              properties:
+                                showFields:
+                                  type: array
+                                  items:
+                                    type: string
+                                  description: 展示字段
+                                bidirectional:
+                                  type: boolean
+                                  description: 是否为双向关联 true：双向，false：单向
+                            sourceField:
+                              type: string
+                              description: type=Relation时，目标表关联字段 id
+                          required:
+                          - id
+                          - type
+                          - alias
+                          - name
+                          - desc
+                          - required
+                          - sourceField
+                        description: 字段列表
+                      views:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              description: 视图 ID
+                            name:
+                              type: string
+                              description: 视图 名称
+                            type:
+                              type: string
+                              description: 视图类型
+                          required:
+                          - id
+                          - name
+                          - type
+                      remark:
+                        type: string
+                        description: 描述
+                      desc:
+                        type: string
+                        description: 说明
+                    required:
+                    - worksheetId
+                    - name
+                    - remark
+                    - alias
+                    - fields
+                    - views
+                    - desc
+                  success:
+                    type: boolean
+                    description: 是否调用成功
+                  error_code:
+                    type: integer
+                    description: 错误代码
+                  error_msg:
+                    type: string
+                    description: 错误消息
+                required:
+                - data
+                - success
+          headers: {}
+      security: []
+components:
+  schemas: {}
+  securitySchemes:
+    bearer:
+      type: bearer
+      scheme: bearer
+servers:
+- url: https://api.mingdao.com
+  description: 正式环境
+security:
+- bearer: []

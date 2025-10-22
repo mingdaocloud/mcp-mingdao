@@ -1,0 +1,107 @@
+openapi: 3.0.1
+info:
+  title: ''
+  description: ''
+  version: 1.0.0
+paths:
+  /v3/departments/lookup:
+    get:
+      summary: 查找部门
+      deprecated: false
+      description: 根据输入的部门名称匹配部门，返回部门 ID 和名称。
+      tags:
+      - V3-beta（AI 友好）/公共查询
+      - 公共查询
+      parameters:
+      - name: name
+        in: query
+        description: 部门名称（精准匹配）
+        required: true
+        schema:
+          type: string
+      - name: HAP-Appkey
+        in: header
+        description: appkey
+        required: false
+        schema:
+          type: string
+      - name: HAP-Sign
+        in: header
+        description: 签名
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      departments:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/obj_department'
+                    required:
+                    - departments
+                  success:
+                    type: boolean
+                    description: 是否调用成功
+                  error_code:
+                    type: integer
+                    description: 错误代码
+                  error_msg:
+                    type: string
+                    description: 错误消息
+                required:
+                - data
+                - success
+          headers: {}
+      security: []
+components:
+  schemas:
+    obj_department:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 部门Id
+        name:
+          type: string
+          description: 部门名称
+        path:
+          type: string
+          description: '部门路径
+
+            "最高级部门名称/.../父部门名称"'
+        pathNodes:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: 部门id
+              name:
+                type: string
+                description: 部门名称
+            required:
+            - id
+            - name
+          description: 部门路径列表
+      required:
+      - id
+      - name
+  securitySchemes:
+    bearer:
+      type: bearer
+      scheme: bearer
+servers:
+- url: https://api.mingdao.com
+  description: 正式环境
+security:
+- bearer: []

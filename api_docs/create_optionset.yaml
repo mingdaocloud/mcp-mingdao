@@ -1,0 +1,115 @@
+openapi: 3.0.1
+info:
+  title: ''
+  description: ''
+  version: 1.0.0
+paths:
+  /v3/app/optionsets:
+    post:
+      summary: 创建选项集
+      deprecated: false
+      description: '创建选项集信息
+
+        数据包括：选项集名称、选项集信息（选项值、排序、颜色、分值）'
+      tags:
+      - V3-beta（AI 友好）/选项集
+      - 选项集
+      parameters:
+      - name: HAP-Appkey
+        in: header
+        description: appkey
+        required: false
+        schema:
+          type: string
+      - name: HAP-Sign
+        in: header
+        description: 签名
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 选项集名称
+                options:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      value:
+                        type: string
+                        description: 选项值，不允许重复
+                      index:
+                        type: integer
+                        description: '选项排序值: 必须为整数，越小越靠前'
+                      color:
+                        type: string
+                        description: '颜色值: colorful为true时生效，参考值 #C0E6FC , #C3F2F2
+                          , #00C345 , #FAD714 , #FF9300 , #F52222 , #EB2F96 , #7500EA
+                          , #2D46C4 , #484848 , #C9E6FC , #C3F2F2'
+                      score:
+                        type: number
+                        description: 分值，enableScore为true时生效，允许小数和正负值
+                    required:
+                    - value
+                    - index
+                    - color
+                    - score
+                  description: 选项集
+                enableColor:
+                  type: boolean
+                  description: 启用彩色
+                enableScore:
+                  type: boolean
+                  description: 启用分值
+              required:
+              - name
+              - options
+              - enableColor
+              - enableScore
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      optionsetId:
+                        type: string
+                        description: 选项集 ID
+                    required:
+                    - optionsetId
+                  success:
+                    type: boolean
+                    description: 是否调用成功
+                  error_code:
+                    type: integer
+                    description: 错误代码
+                  error_msg:
+                    type: string
+                    description: 错误消息
+                required:
+                - data
+                - success
+          headers: {}
+      security: []
+components:
+  schemas: {}
+  securitySchemes:
+    bearer:
+      type: bearer
+      scheme: bearer
+servers:
+- url: https://api.mingdao.com
+  description: 正式环境
+security:
+- bearer: []

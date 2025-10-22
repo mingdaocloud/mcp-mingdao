@@ -1,0 +1,89 @@
+openapi: 3.0.1
+info:
+  title: ''
+  description: ''
+  version: 1.0.0
+paths:
+  /v3/app/worksheets/list:
+    post:
+      summary: 获取工作表列表
+      deprecated: false
+      description: 获取应用下工作表列表信息
+      tags:
+      - V3-beta（AI 友好）/工作表
+      - 工作表
+      parameters:
+      - name: HAP-Appkey
+        in: header
+        description: appkey
+        required: false
+        schema:
+          type: string
+      - name: HAP-Sign
+        in: header
+        description: 签名
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                responseFormat:
+                  type: string
+                  description: json：返回 JSON，md：返回 md 文本(更省 token)。默认为 json
+                worksheets:
+                  type: array
+                  items:
+                    type: string
+                  description: 指定返回工作表 id，填入后返回数据中只包含这些工作表信息
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                properties:
+                  error_code:
+                    type: integer
+                    description: 错误代码
+                  error_msg:
+                    type: string
+                    description: 错误消息
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: 工作表 id
+                        name:
+                          type: string
+                          description: ' 工作表名称'
+                        remark:
+                          type: string
+                          description: 描述
+                      required:
+                      - id
+                      - name
+                      - remark
+                title: ''
+                type: object
+                required:
+                - data
+          headers: {}
+      security: []
+components:
+  schemas: {}
+  securitySchemes:
+    bearer:
+      type: bearer
+      scheme: bearer
+servers:
+- url: https://api.mingdao.com
+  description: 正式环境
+security:
+- bearer: []

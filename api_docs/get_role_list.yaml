@@ -1,0 +1,150 @@
+openapi: 3.0.1
+info:
+  title: ''
+  description: ''
+  version: 1.0.0
+paths:
+  /v3/app/roles:
+    get:
+      summary: 获取角色列表
+      deprecated: false
+      description: 获取应用下角色列表
+      tags:
+      - V3-beta（AI 友好）/角色
+      - 角色
+      parameters:
+      - name: HAP-Appkey
+        in: header
+        description: appkey
+        required: false
+        schema:
+          type: string
+      - name: HAP-Sign
+        in: header
+        description: 签名
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      roles:
+                        $ref: '#/components/schemas/obj_role'
+                    required:
+                    - roles
+                  success:
+                    type: boolean
+                    description: 是否调用成功
+                  error_code:
+                    type: integer
+                    description: 错误代码
+                  error_msg:
+                    type: string
+                    description: 错误消息
+                required:
+                - data
+                - success
+          headers: {}
+      security: []
+components:
+  schemas:
+    obj_role:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 角色Id
+        name:
+          type: string
+          description: 角色名称
+        roleType:
+          type: string
+          description: 角色类型
+        description:
+          type: string
+          description: 角色描述
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/obj_user'
+          description: 用户列表
+        departmentTrees:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: 部门 id
+              name:
+                type: string
+                description: ' 部门名称'
+          description: 部门树列表
+        departments:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: 部门 id
+              name:
+                type: string
+                description: ' 部门名称'
+            required:
+            - id
+            - name
+          description: 部门列表
+        jobs:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: 职位 id
+              name:
+                type: string
+                description: ' 职位名称'
+          description: 职位列表
+        orgRoleIds:
+          type: array
+          items:
+            type: string
+            description: 组织角色ID
+          description: 组织角色列表
+      required:
+      - departments
+    obj_user:
+      type: object
+      properties:
+        accountId:
+          type: string
+          description: 人员 id
+        fullname:
+          type: string
+          description: ' 名称'
+        avatar:
+          type: string
+          description: 头像地址
+      required:
+      - accountId
+      - fullname
+      - avatar
+  securitySchemes:
+    bearer:
+      type: bearer
+      scheme: bearer
+servers:
+- url: https://api.mingdao.com
+  description: 正式环境
+security:
+- bearer: []

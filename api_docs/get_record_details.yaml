@@ -1,0 +1,139 @@
+openapi: 3.0.1
+info:
+  title: ''
+  description: ''
+  version: 1.0.0
+paths:
+  /v3/app/worksheets/{worksheet_id}/rows/{row_id}:
+    get:
+      summary: 获取行记录详情
+      deprecated: false
+      description: 获取记录详情信息，包括创建者、拥有者、控件信息、根据控件数据类型生成示例值
+      tags:
+      - V3-beta（AI 友好）/工作表行记录
+      - 工作表行记录
+      parameters:
+      - name: worksheet_id
+        in: path
+        description: 工作表 ID
+        required: true
+        schema:
+          type: string
+      - name: row_id
+        in: path
+        description: ' 行记录 ID'
+        required: true
+        schema:
+          type: string
+      - name: includeSystemFields
+        in: query
+        description: 是否获取系统字段
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - name: HAP-Appkey
+        in: header
+        description: appkey
+        required: false
+        schema:
+          type: string
+      - name: HAP-Sign
+        in: header
+        description: 签名
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/obj_record_row'
+                  success:
+                    type: boolean
+                    description: 是否调用成功
+                  error_code:
+                    type: integer
+                    description: 错误代码
+                  error_msg:
+                    type: string
+                    description: 错误消息
+                required:
+                - data
+                - success
+          headers: {}
+      security: []
+components:
+  schemas:
+    obj_record_row:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 行记录 ID
+        '{field}':
+          description: 字段和对应的值
+          oneOf:
+          - type: string
+          - type: integer
+          - type: boolean
+          - type: array
+            items:
+              type: string
+          - type: object
+            properties: {}
+          - type: number
+          type: 'null'
+        _createdAt:
+          type: string
+          description: 创建时间
+        _createdBy:
+          $ref: '#/components/schemas/obj_user'
+          description: 创建人信息
+        _updatedAt:
+          type: string
+          description: 更新时间
+        _updatedBy:
+          $ref: '#/components/schemas/obj_user'
+          description: 创建人信息
+        _owner:
+          $ref: '#/components/schemas/obj_user'
+          description: 创建人信息
+      required:
+      - id
+      - _createdAt
+      - _createdBy
+      - _updatedAt
+      - _updatedBy
+      - _owner
+      - '{field}'
+    obj_user:
+      type: object
+      properties:
+        accountId:
+          type: string
+          description: 人员 id
+        fullname:
+          type: string
+          description: ' 名称'
+        avatar:
+          type: string
+          description: 头像地址
+      required:
+      - accountId
+      - fullname
+      - avatar
+  securitySchemes:
+    bearer:
+      type: bearer
+      scheme: bearer
+servers:
+- url: https://api.mingdao.com
+  description: 正式环境
+security:
+- bearer: []

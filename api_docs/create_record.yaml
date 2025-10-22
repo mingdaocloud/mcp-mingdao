@@ -1,0 +1,111 @@
+openapi: 3.0.1
+info:
+  title: ''
+  description: ''
+  version: 1.0.0
+paths:
+  /v3/app/worksheets/{worksheet_id}/rows:
+    post:
+      summary: 新建行记录
+      deprecated: false
+      description: 新建行记录
+      tags:
+      - V3-beta（AI 友好）/工作表行记录
+      - 工作表行记录
+      parameters:
+      - name: worksheet_id
+        in: path
+        description: 工作表 ID
+        required: true
+        schema:
+          type: string
+      - name: HAP-Appkey
+        in: header
+        description: appkey
+        required: false
+        schema:
+          type: string
+      - name: HAP-Sign
+        in: header
+        description: 签名
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fields:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        title: ''
+                        description: 字段 ID/别名
+                      value:
+                        type: string
+                      type:
+                        type: string
+                        description: 'SingleSelect/MultipleSelect:1=不增量选项，2=允许增加选项，默认为1
+
+
+                          Attachment:0=覆盖，1=新增，默认为 0
+
+                          '
+                    required:
+                    - id
+                    - value
+                  title: ''
+                  description: 控件数据
+                triggerWorkflow:
+                  type: boolean
+                  description: 是否触发工作流
+                  default: true
+              required:
+              - fields
+              title: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: 行记录 ID
+                    required:
+                    - id
+                  success:
+                    type: boolean
+                    description: 是否调用成功
+                  error_code:
+                    type: integer
+                    description: 错误代码
+                  error_msg:
+                    type: string
+                    description: 错误消息
+                required:
+                - data
+                - success
+          headers: {}
+      security: []
+components:
+  schemas: {}
+  securitySchemes:
+    bearer:
+      type: bearer
+      scheme: bearer
+servers:
+- url: https://api.mingdao.com
+  description: 正式环境
+security:
+- bearer: []

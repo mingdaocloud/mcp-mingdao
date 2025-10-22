@@ -1,0 +1,417 @@
+openapi: 3.0.1
+info:
+  title: ''
+  description: ''
+  version: 1.0.0
+paths:
+  /v3/app/worksheets/{worksheet_id}/rows/pivot:
+    post:
+      summary: 获取行记录透视数据
+      deprecated: false
+      description: 获取工作表记录透视表汇总数据
+      tags:
+      - V3-beta（AI 友好）/工作表行记录
+      - 工作表行记录
+      parameters:
+      - name: worksheet_id
+        in: path
+        description: 工作表 ID
+        required: true
+        schema:
+          type: string
+      - name: HAP-Appkey
+        in: header
+        description: appkey
+        required: false
+        schema:
+          type: string
+      - name: HAP-Sign
+        in: header
+        description: 签名
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                pageSize:
+                  type: integer
+                  description: 每页数量，最大为 1000
+                pageIndex:
+                  type: integer
+                  description: 页码
+                viewId:
+                  type: string
+                  description: 视图 ID
+                columns:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      field:
+                        description: 字段ID
+                        type: string
+                      displayName:
+                        description: 显示名称
+                        type: string
+                      granularity:
+                        type: integer
+                        description: '日期、地区统计维度
+
+                          字段类型是日期或者地区时，通过此参数设置统计归组粒度
+
+                          - 日期时间：1-日，2-周，3-月；
+
+                          - 地区：1-省，2-省/市，3-省/市/县（区）。'
+                      includeEmpty:
+                        type: boolean
+                        description: 是否统计空值，默认为false不统计
+                    required:
+                    - field
+                  description: 列（维度）字段列表
+                rows:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      field:
+                        description: 字段ID
+                        type: string
+                      displayName:
+                        description: 显示名称
+                        type: string
+                      granularity:
+                        type: integer
+                        description: '日期、地区统计维度
+
+                          字段类型是日期或者地区时，通过此参数设置统计归组粒度
+
+                          - 日期时间：1-日，2-周，3-月；
+
+                          - 地区：1-省，2-省/市，3-省/市/县（区）。'
+                      includeEmpty:
+                        type: boolean
+                        description: 是否统计空值，默认为false不统计
+                    required:
+                    - field
+                  description: 行（维度）字段列表
+                values:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      field:
+                        description: 字段ID，当aggregation=COUNT时，field必须为`record_count`
+                        type: string
+                      displayName:
+                        description: 显示名称
+                        type: string
+                      aggregation:
+                        description: '聚合方式（不区分大小写）
+
+                          - COUNT：计数
+
+                          - DISTINCTCOUNT：去重计数
+
+                          - SUM：求和
+
+                          - MIN：最小值
+
+                          - MAX：最大值
+
+                          - AVG：平均值'
+                        type: string
+                      includeEmpty:
+                        type: boolean
+                        description: 是否统计空值，默认为false不统计，空值将显示为0
+                    required:
+                    - field
+                    - aggregation
+                  description: 字段值列表
+                filter:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                      description: '''group'' | ''condition''。当 type 为 ''condition''
+                        时，field/operator/value 为必填；当 type 为 ''group'' 时，logic 为必填'
+                    logic:
+                      type: string
+                      description: '''AND'' | ''OR''。不区分大小写'
+                    children:
+                      type: array
+                      items:
+                        properties:
+                          type:
+                            type: string
+                            description: '''group'' | ''condition''。当 type 为 ''condition''
+                              时，field/operator/value 为必填；当 type 为 ''group'' 时，logic
+                              为必填'
+                          logic:
+                            type: string
+                            description: '''AND'' | ''OR''。不区分大小写'
+                          field:
+                            type: string
+                            description: 字段 ID/别名
+                          operator:
+                            type: string
+                            description: 运算符
+                          value:
+                            description: 值（字符串、数值、数组、日期范围DateRange字符串）
+                            oneOf:
+                            - type: string
+                            - type: integer
+                            - type: boolean
+                            - type: array
+                              items:
+                                type: string
+                            - type: object
+                              properties: {}
+                            - type: number
+                            type: 'null'
+                          children:
+                            $ref: '#/components/schemas/obj_filter_children'
+                        type: object
+                        required:
+                        - type
+                  description: 筛选器
+                  required:
+                  - type
+                sorts:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      field:
+                        type: string
+                        description: 字段ID
+                      isAsc:
+                        type: boolean
+                        description: 是否升序，默认为降序
+                    required:
+                    - field
+                    - isAsc
+                  description: 排序字段
+                includeSummary:
+                  type: boolean
+                  description: 返回值是否包含所有行汇总值
+              required:
+              - values
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      meta:
+                        description: 透视表元数据
+                        $ref: '#/components/schemas/obj_pivot_meta'
+                      pivot:
+                        $ref: '#/components/schemas/obj_pivot_data'
+                        description: 透视表数据
+                      summary:
+                        type: object
+                        properties:
+                          field:
+                            type: string
+                            description: 字段ID对应的汇总值
+                        required:
+                        - field
+                        description: 汇总值
+                      totalPages:
+                        type: integer
+                        description: 总页数
+                      currentPage:
+                        type: integer
+                        description: 当前页码
+                    description: 返回透视表数据
+                    required:
+                    - meta
+                    - pivot
+                    - totalPages
+                    - currentPage
+                  success:
+                    type: boolean
+                    description: 是否调用成功
+                  error_code:
+                    type: integer
+                    description: 错误代码
+                  error_msg:
+                    type: string
+                    description: 错误消息
+                required:
+                - data
+                - success
+          headers: {}
+      security: []
+components:
+  schemas:
+    obj_filter_children:
+      type: object
+      properties:
+        type:
+          type: string
+          description: '''group'' | ''condition''。当 type 为 ''condition'' 时，field/operator/value
+            为必填；当 type 为 ''group'' 时，logic 为必填'
+        logic:
+          type: string
+          description: '''AND'' | ''OR''。不区分大小写'
+        field:
+          type: string
+          description: 字段 ID/别名
+        operator:
+          type: string
+          description: 运算符
+        value:
+          description: 值（字符串、数值、数组、日期范围DateRange字符串）
+          oneOf:
+          - type: string
+          - type: integer
+          - type: boolean
+          - type: array
+            items:
+              type: string
+          - type: object
+            properties: {}
+          - type: number
+          type: 'null'
+      required:
+      - type
+    obj_pivot_data:
+      type: object
+      properties:
+        columns:
+          type: object
+          properties:
+            field:
+              type: number
+              description: 字段ID对应的值
+          required:
+          - field
+          description: 列数据
+        rows:
+          type: object
+          properties:
+            field:
+              type: number
+              description: 字段ID对应的值
+          required:
+          - field
+          description: 行数据
+        values:
+          type: object
+          properties:
+            field:
+              type: number
+              description: 字段ID对应的值
+          required:
+          - field
+          description: 值数据
+    obj_pivot_meta:
+      type: object
+      properties:
+        columns:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                description: 字段ID
+                type: string
+              displayName:
+                description: 显示名称
+                type: string
+              granularity:
+                type: integer
+                description: '日期、地区统计维度
+
+                  字段类型是日期或者地区时，通过此参数设置统计归组粒度
+
+                  - 日期时间：1-日，2-周，3-月；
+
+                  - 地区：1-省，2-省/市，3-省/市/县（区）。'
+              includeEmpty:
+                type: boolean
+                description: 是否统计空值，默认为false不统计
+            required:
+            - field
+          description: 列（维度）字段列表
+        rows:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                description: 字段ID
+                type: string
+              displayName:
+                description: 显示名称
+                type: string
+              granularity:
+                type: integer
+                description: '日期、地区统计维度
+
+                  字段类型是日期或者地区时，通过此参数设置统计归组粒度
+
+                  - 日期时间：1-日，2-周，3-月；
+
+                  - 地区：1-省，2-省/市，3-省/市/县（区）。'
+              includeEmpty:
+                type: boolean
+                description: 是否统计空值，默认为false不统计
+            required:
+            - field
+          description: 行（维度）字段列表
+        values:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                description: 字段ID，仅统计记录行数时，使用`record_count`作为字段ID
+                type: string
+              displayName:
+                description: 显示名称
+                type: string
+              aggregation:
+                description: '聚合方式（不区分大小写）
+
+                  - COUNT：计数
+
+                  - DISTINCTCOUNT：去重计数
+
+                  - SUM：求和
+
+                  - MIN：最小值
+
+                  - MAX：最大值
+
+                  - AVG：平均值'
+                type: string
+              includeEmpty:
+                type: boolean
+                description: 是否统计空值，默认为false不统计，空值将显示为0
+            required:
+            - field
+            - aggregation
+          description: 字段值列表
+      required:
+      - values
+      description: 元数据
+  securitySchemes:
+    bearer:
+      type: bearer
+      scheme: bearer
+servers:
+- url: https://api.mingdao.com
+  description: 正式环境
+security:
+- bearer: []
