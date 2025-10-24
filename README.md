@@ -1,5 +1,7 @@
 # Basic MCP Server
 
+[![smithery badge](https://smithery.ai/badge/@mingdaocloud/mcp-mingdao)](https://smithery.ai/server/@mingdaocloud/mcp-mingdao)
+
 A minimal Model Context Protocol (MCP) server demonstrating tools, resources, and prompts.
 
 Built with [Smithery SDK](https://smithery.ai/docs)
