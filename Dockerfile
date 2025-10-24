@@ -1,15 +1,13 @@
 FROM node:18-alpine
 
-WORKDIR /app
+# Copy the entire hap-mcp directory into /app/hap-mcp
+COPY hap-mcp /app/hap-mcp
 
-# Copy package.json and package-lock.json from the hap-mcp directory
-COPY hap-mcp/package*.json ./
+# Set the working directory to /app/hap-mcp
+WORKDIR /app/hap-mcp
 
 # Install dependencies
 RUN npm install
-
-# Copy the entire application code from the hap-mcp directory
-COPY hap-mcp/. .
 
 # Build the application
 RUN npm run build
