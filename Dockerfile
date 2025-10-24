@@ -14,5 +14,8 @@ COPY hap-mcp/. .
 # Build the application
 RUN npm run build
 
+# Verify the build output
+RUN ls -lR dist
+
 # Specify the command to run the application
 CMD ["node", "dist/index.js"]
