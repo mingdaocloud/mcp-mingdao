@@ -14,8 +14,8 @@ type ToolExtra = {
 
 export const configSchema = z.object({
   debug: z.boolean().default(false).describe("Enable debug logging"),
-  hapAppkey: z.string().optional().describe("HAP-Appkey for external API authentication"),
-  hapSign: z.string().optional().describe("HAP-Sign for external API authentication"),
+  hapAppkey: z.string().describe("HAP-Appkey for external API authentication"),
+  hapSign: z.string().describe("HAP-Sign for external API authentication"),
 });
 
 export default function createServer({ config }: { config: z.infer<typeof configSchema> }) {
