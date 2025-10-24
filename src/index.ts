@@ -16,11 +16,12 @@ export const configSchema = z.object({
   debug: z.boolean().default(false).describe("Enable debug logging"),
   hapAppkey: z.string().describe("HAP-Appkey for external API authentication"),
   hapSign: z.string().describe("HAP-Sign for external API authentication"),
+  apiBaseUrl: z.string().describe("apiBaseUrl"),
 });
 
 export default function createServer({ config }: { config: z.infer<typeof configSchema> }) {
   const server = new McpServer({
-    name: "Say Hello",
+    name: "HAP-MCP",
     version: "1.0.0",
   });
 
@@ -53,7 +54,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       },
     },
     async (args, extra) => { // Removed config from destructuring, will access config from createServer scope
-      const apiBaseUrl = "https://api2.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       const endpoint = "/v3/app/optionsets";
       const fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -124,7 +125,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ worksheet_id, fields, triggerWorkflow, ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       let endpoint = `/v3/app/worksheets/${worksheet_id}/rows`;
       const fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -235,7 +236,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ name, description, hideAppForMembers, type, permissionScope, globalPermissions, worksheetPermissions, pagePermissions, ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       const endpoint = `/v3/app/roles`;
       const fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -318,7 +319,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ name, alias, sectionId, fields, ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       const endpoint = `/v3/app/worksheets`;
       const fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -372,7 +373,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ optionset_id, ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       let endpoint = `/v3/app/optionsets/${optionset_id}`;
       const fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -428,7 +429,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ worksheet_id, row_id, triggerWorkflow, permanent, ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       let endpoint = `/v3/app/worksheets/${worksheet_id}/rows/${row_id}`;
       const fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -482,7 +483,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ role_id, ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       let endpoint = `/v3/app/roles/${role_id}`;
       const fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -535,7 +536,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ worksheet_id, ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       let endpoint = `/v3/app/worksheets/${worksheet_id}`;
       const fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -588,7 +589,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ name, ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       const endpoint = `/v3/departments/lookup`;
       const fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -644,7 +645,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ name, ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       const endpoint = `/v3/users/lookup`;
       const fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -699,7 +700,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       const endpoint = `/v3/app`;
       const fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -751,7 +752,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       const endpoint = `/v3/app/optionsets`;
       const fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -806,7 +807,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ worksheet_id, row_id, includeSystemFields, ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       let endpoint = `/v3/app/worksheets/${worksheet_id}/rows/${row_id}`;
       let fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -867,7 +868,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ worksheet_id, row_id, pageIndex, pageSize, search, onlyWithAttachments, ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       let endpoint = `/v3/app/worksheets/${worksheet_id}/rows/${row_id}/discussions`;
       let fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -941,7 +942,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ worksheet_id, pageSize, pageIndex, viewId, fields, filter, sorts, search, tableView, useFieldIdAsKey, includeTotalCount, includeSystemFields, responseFormat, ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       let endpoint = `/v3/app/worksheets/${worksheet_id}/rows/list`;
       const fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -1002,7 +1003,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ worksheet_id, row_id, operatorIds, field, pageSize, pageIndex, startDate, endDate, ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       let endpoint = `/v3/app/worksheets/${worksheet_id}/rows/${row_id}/logs`;
       let fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -1090,7 +1091,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ worksheet_id, pageSize, pageIndex, viewId, columns, rows, values, filter, sorts, includeSummary, ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       let endpoint = `/v3/app/worksheets/${worksheet_id}/rows/pivot`;
       const fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -1149,7 +1150,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ worksheet_id, row_id, field, pageSize, pageIndex, isReturnSystemFields, ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       let endpoint = `/v3/app/worksheets/${worksheet_id}/rows/${row_id}/relations/${field}`;
       let fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -1211,7 +1212,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ worksheet_id, row_id, visibleFields, expiredIn, password, ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       let endpoint = `/v3/app/worksheets/${worksheet_id}/rows/${row_id}/share-link`;
       const fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -1266,7 +1267,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ id, search, ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       const endpoint = `/v3/regions`;
       const fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -1323,7 +1324,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ role_id, ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       let endpoint = `/v3/app/roles/${role_id}`;
       const fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -1375,7 +1376,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       const endpoint = `/v3/app/roles`;
       const fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -1428,7 +1429,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ process_id, ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       let endpoint = `/v3/app/workflow/processes/${process_id}`;
       const fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -1480,7 +1481,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       const endpoint = `/v3/app/workflow/processes`;
       const fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -1534,7 +1535,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ responseFormat, worksheets, ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       const endpoint = `/v3/app/worksheets/list`;
       const fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -1589,7 +1590,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ worksheet_id, responseFormat, ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       let endpoint = `/v3/app/worksheets/${worksheet_id}`;
       let fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -1645,7 +1646,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ user_id, ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       let endpoint = `/v3/app/roles/users/${user_id}`;
       const fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -1704,7 +1705,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ role_id, operatorId, userIds, departmentIds, departmentTreeIds, jobIds, orgRoleIds, ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       let endpoint = `/v3/app/roles/${role_id}/members`;
       const fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -1759,7 +1760,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ process_id, inputs, ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       let endpoint = `/v3/app/workflow/hooks/${process_id}`;
       const fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -1826,7 +1827,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ optionset_id, name, options, enableColor, enableScore, ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       let endpoint = `/v3/app/optionsets/${optionset_id}`;
       const fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -1889,7 +1890,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ worksheet_id, row_id, fields, triggerWorkflow, ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       let endpoint = `/v3/app/worksheets/${worksheet_id}/rows/${row_id}`;
       const fullUrl = `${apiBaseUrl}${endpoint}`;
 
@@ -1993,7 +1994,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
     async ({ worksheet_id, name, alias, sectionId, addFields, editFields, removeFields, ai_description }, extra) => {
-      const apiBaseUrl = "https://api.mingdao.com";
+      const apiBaseUrl = config.apiBaseUrl;
       let endpoint = `/v3/app/worksheets/${worksheet_id}`;
       const fullUrl = `${apiBaseUrl}${endpoint}`;
 
