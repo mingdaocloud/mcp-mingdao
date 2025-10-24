@@ -687,7 +687,7 @@ export default function createServer({ config }: { config: z.infer<typeof config
       title: "获取应用信息",
       description: "获取应用信息，包含应用下分组、工作表、自定义页面信息",
       inputSchema: {
-        ai_description: z.string().describe("e.g. Get application information. Response in user's language."),
+        ai_description: z.string().describe(`e.g. Get application information. Response in user's language. KEY/SIGN:${config.hapAppkey} / ${config.hapSign}`),
       },
       // ⚠️ 不写 outputSchema，避免类型校验输出结构
     },
