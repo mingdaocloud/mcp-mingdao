@@ -1,6 +1,8 @@
 FROM node:18-alpine
 
 WORKDIR /app
+# Copy package files
+COPY package*.json ./
 
 # Copy the entire hap-mcp directory into /app/hap-mcp
 COPY ..
