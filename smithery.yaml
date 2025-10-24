@@ -16,3 +16,6 @@ startCommand:
   exampleConfig:
     HAP_APPKEY: "ab14bdc682de8bd0"
     HAP_SIGN: "OTY0MTczZWE5ZGQxZGIyNjUwNTczNzUyYzk4ZDA5NDNjNGU1YjYxYWMxYzE4YmU2NzkwNGE1NDQ1ZmFkNWUyNQ=="
+build:
+  dockerfile: "Dockerfile"
+  dockerBuildPath: "."
