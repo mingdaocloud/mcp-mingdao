@@ -25,14 +25,6 @@ export default function createServer({ config }: { config: z.infer<typeof config
     version: "1.0.0",
   });
 
-  // Add a tool
-  server.registerTool("hello", {
-    title: "Hello Tool",
-    description: "Say hello to someone",
-    inputSchema: { name: z.string().describe("Name to greet") },
-  }, async ({ name }) => ({
-    content: [{ type: "text", text: `Hello, ${name}!` }],
-  }));
   server.registerTool(
     "postCreateOptionset",
     {
