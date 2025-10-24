@@ -1,0 +1,18 @@
+runtime: "container"
+startCommand:
+  type: "http"
+  configSchema:
+    type: "object"
+    required: ["HAP_APPKEY", "HAP_SIGN"]
+    properties:
+      HAP_APPKEY:
+        type: "string"
+        title: "HAP Appkey"
+        description: "Your HAP Application Key"
+      HAP_SIGN:
+        type: "string"
+        title: "HAP Sign"
+        description: "Your HAP Application Signature"
+  exampleConfig:
+    HAP_APPKEY: "ab14bdc682de8bd0"
+    HAP_SIGN: "OTY0MTczZWE5ZGQxZGIyNjUwNTczNzUyYzk4ZDA5NDNjNGU1YjYxYWMxYzE4YmU2NzkwNGE1NDQ1ZmFkNWUyNQ=="
